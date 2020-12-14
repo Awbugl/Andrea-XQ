@@ -81,11 +81,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Export\CQExport.log">
-      <DependentUpon>CQExport.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </None>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -99,12 +94,6 @@
       <Project>{832b397c-2ed6-49b4-870d-aa67d52f680b}</Project>
       <Name>Andrea</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Export\CQExport.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CQExport.log</LastGenOutput>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ImportGroup Label=".NET DllExport">
