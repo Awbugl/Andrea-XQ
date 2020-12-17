@@ -7,7 +7,7 @@
     <ProjectGuid>{C03C5BB7-91D0-4894-AAF9-127090DFAD91}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Native.Core</RootNamespace>
+    <RootNamespace>Andrea.XQ</RootNamespace>
     <AssemblyName>Andrea.XQ</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
