@@ -19,7 +19,6 @@ namespace Andrea_XQ
     {
         private static readonly XqApi Api = new XqApi();
         public static byte[] Authid = new byte[8];
-        public static string RobotQq = "2967373629";
 
         [DllExport(ExportName = "XQ_AuthId", CallingConvention = CallingConvention.StdCall)]
         public static void XQ_AuthId(int id, int i) => AuthId(id, i);
@@ -69,24 +68,23 @@ namespace Andrea_XQ
             {
                 long.TryParse(fromQq, out long fromQqInt64);
                 long.TryParse(fromGroup, out long fromGroupInt64);
-                
+
                 switch (eventType)
                 {
                     case 1:// Friend:
                         if (!CacheCompleted || Check(false, content, out string[] messageArrayFriend)) return 1;
-                        Process(0, Api, 0, fromQqInt64, messageArrayFriend);
+                        Process(0, Api, robotQq, 0, fromQqInt64, messageArrayFriend);
                         break;
 
                     case 2:// Group:
-                        //if (CacheCompleted && AddGroup(fromGroupInt64, out string message)) Api.SendGroupMessage(fromGroupInt64, message);
-                        AddGroup(fromGroupInt64);
+                        AddGroup(fromGroupInt64, robotQq);
                         if (!CacheCompleted || Check(true, content, out string[] messageArrayGroup)) return 1;
-                        Process(1, Api, fromGroupInt64, fromQqInt64, messageArrayGroup);
+                        Process(1, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayGroup);
                         break;
 
                     case 4:// GroupTmp:
                         if (!CacheCompleted || Check(false, content, out string[] messageArrayTemp)) return 1;
-                        Process(2, Api, fromGroupInt64, fromQqInt64, messageArrayTemp);
+                        Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayTemp);
                         break;
 
                     case 101:// AddFriend:
@@ -117,36 +115,36 @@ namespace Andrea_XQ
     internal class XqApi : IAndreaApi
     {
 
-        public int SendFriendMessage(long qq, string messages)
+        public int SendFriendMessage(string robotqq, long qq, string messages)
         {
-            Xqdll.SendMsg(Main.Authid, Main.RobotQq, 1, "", qq.ToString(), messages, 0);
+            Xqdll.SendMsg(Main.Authid, robotqq, 1, "", qq.ToString(), messages, 0);
             return 1;
         }
 
-        public int SendGroupMessage(long group, string messages)
+        public int SendGroupMessage(string robotqq, long group, string messages)
         {
-            Xqdll.SendMsg(Main.Authid, Main.RobotQq, 2, group.ToString(), "", messages, 0);
+            Xqdll.SendMsg(Main.Authid, robotqq, 2, group.ToString(), "", messages, 0);
             return 1;
         }
 
-        public int SendTempMessage(long qq, long group, string messages)
+        public int SendTempMessage(string robotqq, long qq, long group, string messages)
         {
-            Xqdll.SendMsg(Main.Authid, Main.RobotQq, 4, group.ToString(), qq.ToString(), messages, 0);
+            Xqdll.SendMsg(Main.Authid, robotqq, 4, group.ToString(), qq.ToString(), messages, 0);
             return 1;
         }
 
-        public int ExitGroup(long group)
+        public int ExitGroup(string robotqq, long group)
         {
-            Xqdll.QuitGroup(Main.Authid, Main.RobotQq, group.ToString());
+            Xqdll.QuitGroup(Main.Authid, robotqq, group.ToString());
             return 1;
         }
 
-        public bool GetGroupPermission(long qq, long group)
+        public bool GetGroupPermission(string robotqq, long qq, long group)
         {
-            return IntPtrToString(Xqdll.GetGroupAdmin(Main.Authid, Main.RobotQq, group.ToString())).Contains(qq.ToString());
+            return IntPtrToString(Xqdll.GetGroupAdmin(Main.Authid, robotqq, group.ToString())).Contains(qq.ToString());
         }
 
-        public string GetQqNick(long qq) => IntPtrToString(Xqdll.GetNick(Main.Authid, Main.RobotQq, qq.ToString()));
+        public string GetQqNick(string robotqq, long qq) => IntPtrToString(Xqdll.GetNick(Main.Authid, robotqq, qq.ToString()));
 
         private static string IntPtrToString(IntPtr intPtr)
         {
