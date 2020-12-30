@@ -38,10 +38,8 @@
       <HintPath>..\packages\Costura.Fody.1.6.2\lib\dotnet\Costura.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DllExport, PublicKeyToken=8337224c9ad9e356">
-      <HintPath>$(SolutionDir)packages\DllExport.1.6.1\gcache\metalib\$(DllExportNamespace)\$(DllExportMetaLibName)</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="DllExport">
+      <HintPath>..\packages\DllExport.1.6.1\gcache\metalib\System.Runtime.InteropServices\DllExport.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,8 +64,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Git\Andrea\Andrea\Andrea.csproj">
-      <Project>{832b397c-2ed6-49b4-870d-aa67d52f680b}</Project>
+    <Analyzer Include="..\..\..\Users\littl\Desktop\AndreaBot\packages\DllExport.1.6.1\gcache\metalib\System.Runtime.InteropServices\DllExport.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Andrea\Andrea\Andrea.csproj">
+      <Project>{2bdcacea-96aa-467c-8c00-8951c21f7470}</Project>
       <Name>Andrea</Name>
     </ProjectReference>
   </ItemGroup>
