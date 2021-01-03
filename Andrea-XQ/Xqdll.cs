@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Andrea_XQ
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [SuppressMessage("ReSharper", "CommentTypo")]
     public class Xqdll
     {
         private const string DllName = "xqapi.dll";
@@ -892,18 +895,12 @@ namespace Andrea_XQ
 
         #region 指针转String
 
-        [DllImport("kernel32.dll", EntryPoint = "RtlMoveMemory")]
-        public static extern bool RtlMoveMemory(byte[] dest, IntPtr src, int length);
-
         [DllImport("kernel32.dll", EntryPoint = "GetProcessHeap")]
         public static extern int GetProcessHeap();
 
         [DllImport("kernel32.dll", EntryPoint = "HeapFree")]
-        public static extern int HeapFree1(int hheap, int dwflags, IntPtr lpmeem);
-
-        [DllImport("kernel32.dll", EntryPoint = "lstrlenA", CharSet = CharSet.Ansi)]
-        public static extern int LstrlenA(IntPtr ptr);
-
+        public static extern int HeapFree(int hheap, int dwflags, IntPtr lpmeem);
+        
         #endregion 指针转String
     }
 }
