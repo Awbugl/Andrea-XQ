@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 using Andrea.Model;
 
+
 using static Andrea.Expander;
 // ReSharper disable CommentTypo
 
@@ -62,6 +63,7 @@ namespace Andrea_XQ
             {
                 long.TryParse(fromQq, out long fromQqInt64);
                 long.TryParse(fromGroup, out long fromGroupInt64);
+
                 switch (eventType)
                 {
                     case 1:// Friend:
@@ -84,7 +86,13 @@ namespace Andrea_XQ
                         return 1;
 
                     case 214:// BeInvitedToGroup:
-                        AwReport($"QQ {fromQq} 邀请 {robotQq} 入群 {fromGroup}");
+                        bool isAdmin = robotQq != "2967373629" &&  XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQq);
+                        string message = robotQq == "2967373629"
+                            ? "Andrea停止加群，请邀请Beatrice或Cadilotta(2708288417)。"
+                            : "抱歉，您不是群管理员。";
+                        Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20, message);
+
+                        AwReport($"[BeInvitedToGroupEvent]\nFromQQ : {fromQq}\nRobotQQ : {robotQq}\nFromGroup : {fromGroup}\nState : {(isAdmin ? "Agree" : "Disagree")}");
                         return 1;
 
                     case 12001:// PluginEnable:
@@ -134,14 +142,20 @@ namespace Andrea_XQ
             return 1;
         }
 
-        public bool GetGroupPermission(string robotqq, long qq, long group)
+        public bool GetGroupPermission(string robotqq, long adminqq, long group)
         {
-            return IntPtrToString(Xqdll.GetGroupAdmin(Main.Authid, robotqq, group.ToString())).Contains(qq.ToString());
+            return GetGroupAdminList(robotqq, group).Contains(adminqq.ToString());
         }
 
         public string GetQqNick(string robotqq, long qq) => NickToSendString(IntPtrToString(Xqdll.GetNick(Main.Authid, robotqq, qq.ToString())));
 
-        private static string IntPtrToString(IntPtr intPtr)
+        internal static string[] GetGroupAdminList(string robotqq, long group)
+        {
+            return IntPtrToString(Xqdll.GetGroupAdmin(Main.Authid, robotqq, group.ToString()))
+                .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        internal static string IntPtrToString(IntPtr intPtr)
         {
             try
             {
@@ -155,7 +169,7 @@ namespace Andrea_XQ
 
                 StringBuilder sb = new StringBuilder();
 
-                for ( int i = 0;i < length - 1;)
+                for (int i = 0; i < length - 1;)
                     sb.Append(EncodingGetString(gb18030, bin, ref i, bin[i] < 0x80 ? 1 : bin[i + 1] > 0x3F ? 2 : 4));
 
                 if (length > 1 && bin[length - 2] > 0x80) return sb.ToString();
