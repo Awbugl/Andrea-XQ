@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -146,37 +145,41 @@ namespace Andrea_XQ
         {
             try
             {
+                Encoding gb18030 = Encoding.GetEncoding("gb18030");
                 var length = Marshal.ReadInt32(intPtr);
-                if (length < 0) return "";
+                if (length <= 0) return "";
+
                 byte[] bin = new byte[length];
                 Marshal.Copy(intPtr + 4, bin, 0, length);
                 Xqdll.HeapFree(Xqdll.GetProcessHeap(), 0, intPtr);
 
-                Encoding gb18030 = Encoding.GetEncoding("gb18030");
-                List<byte> list = new List<byte>();
+                StringBuilder sb = new StringBuilder();
 
-                int last = 0;
+                for ( int i = 0;i < length - 1;)
+                    sb.Append(EncodingGetString(gb18030, bin, ref i, bin[i] < 0x80 ? 1 : bin[i + 1] > 0x3F ? 2 : 4));
 
-                for (int i = 0; i < length - 1; ++i)
-                {
-                    if (bin[i] < 0x80 || bin[i + 1] > 0x3F) continue;
+                if (length > 1 && bin[length - 2] > 0x80) return sb.ToString();
 
-                    list.AddRange(bin.Skip(last).Take(i - last));
-                    list.AddRange(Encoding.UTF8.GetBytes(
-                        $"[emoji={Encoding.Convert(gb18030, Encoding.UTF8, bin.Skip(i).Take(4).ToArray()).Aggregate("", (current, bi) => current + bi.ToString("X2"))}]"));
+                sb.Append(gb18030.GetString(bin, length - 1, 1));
 
-                    last = i + 4;
-                    i += 3;
-                }
-                list.AddRange(bin.Skip(last));
-                return gb18030.GetString(list.ToArray());
-
+                return sb.ToString();
             }
             catch (Exception ex)
             {
                 ExceptionReport(ex);
                 return "";
             }
+        }
+
+        private static string EncodingGetString(Encoding encoding, byte[] bin, ref int index, int count)
+        {
+            index += count;
+
+            return count < 4
+                ? encoding.GetString(bin, index - count, count)
+                : "[emoji=" + Encoding.Convert(encoding, Encoding.UTF8,
+                    bin.Skip(index - count).Take(4).ToArray()).Aggregate("", (current, bi)
+                    => current + bi.ToString("X2")) + "]";
         }
 
         private static string NickToSendString(string msg)
