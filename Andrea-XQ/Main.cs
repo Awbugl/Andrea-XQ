@@ -86,13 +86,15 @@ namespace Andrea_XQ
                         return 1;
 
                     case 214:// BeInvitedToGroup:
-                        bool isAdmin = robotQq != "2967373629" &&  XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQq);
-                        string message = robotQq == "2967373629"
-                            ? "Andrea停止加群，请邀请Beatrice或Cadilotta(2708288417)。"
+                        bool isAdmin = robotQq != "2967373629" && XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQqInt64);
+                        string message = isAdmin ? "" : robotQq == "2967373629"
+                            ? "Andrea暂停加群，请邀请Beatrice或Cadilotta(2708288417)。"
                             : "抱歉，您不是群管理员。";
+
                         Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20, message);
 
-                        AwReport($"[BeInvitedToGroupEvent]\nFromQQ : {fromQq}\nRobotQQ : {robotQq}\nFromGroup : {fromGroup}\nState : {(isAdmin ? "Agree" : "Disagree")}");
+                        AwReport($"[BeInvitedToGroupEvent]\nFromQQ : {fromQqInt64}\nRobotQQ : {robotQq}\nFromGroup : {fromGroupInt64}\nState : {(isAdmin ? "Agree" : "Disagree")}");
+
                         return 1;
 
                     case 12001:// PluginEnable:
@@ -142,17 +144,19 @@ namespace Andrea_XQ
             return 1;
         }
 
-        public bool GetGroupPermission(string robotqq, long adminqq, long group)
-        {
-            return GetGroupAdminList(robotqq, group).Contains(adminqq.ToString());
-        }
-
         public string GetQqNick(string robotqq, long qq) => NickToSendString(IntPtrToString(Xqdll.GetNick(Main.Authid, robotqq, qq.ToString())));
 
-        internal static string[] GetGroupAdminList(string robotqq, long group)
+        public bool GetGroupPermission(string robotqq, long adminqq, long group)
+        {
+            return GetGroupAdminList(robotqq, group).Contains(adminqq);
+        }
+
+        internal static long[] GetGroupAdminList(string robotqq, long group)
         {
             return IntPtrToString(Xqdll.GetGroupAdmin(Main.Authid, robotqq, group.ToString()))
-                .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(long.Parse)
+                .ToArray();
         }
 
         internal static string IntPtrToString(IntPtr intPtr)
