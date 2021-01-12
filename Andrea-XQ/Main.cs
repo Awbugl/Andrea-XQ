@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -47,7 +48,15 @@ namespace Andrea_XQ
 
         public static string Create()
         {
-            return File.ReadAllText(@"Andrea\Other\Andrea.json");
+            try
+            {
+                return File.ReadAllText(@"Andrea\Other\Andrea.json");
+            }
+            catch (Exception ex)
+            {
+                ExceptionReport(ex);
+                return "";
+            }
         }
 
         [DllExport(ExportName = "XQ_SetUp", CallingConvention = CallingConvention.StdCall)]
@@ -169,7 +178,6 @@ namespace Andrea_XQ
 
                 byte[] bin = new byte[length];
                 Marshal.Copy(intPtr + 4, bin, 0, length);
-                Xqdll.HeapFree(Xqdll.GetProcessHeap(), 0, intPtr);
 
                 StringBuilder sb = new StringBuilder();
 
@@ -187,6 +195,14 @@ namespace Andrea_XQ
                 ExceptionReport(ex);
                 return "";
             }
+            finally
+            {
+                if (Xqdll.HeapFree(Xqdll.GetProcessHeap(), 0, intPtr) == 0)
+                {
+                    int err = Marshal.GetLastWin32Error();
+                    if (err != 0) ExceptionReport(new Win32Exception(err));
+                }
+            }
         }
 
         private static string EncodingGetString(Encoding encoding, byte[] bin, ref int index, int count)
@@ -195,8 +211,8 @@ namespace Andrea_XQ
 
             return count < 4
                 ? encoding.GetString(bin, index - count, count)
-                : "[emoji=" + Encoding.Convert(encoding, Encoding.UTF8,
-                    bin.Skip(index - count).Take(4).ToArray()).Aggregate("", (current, bi)
+                : Encoding.Convert(encoding, Encoding.UTF8,
+                    bin.Skip(index - count).Take(4).ToArray()).Aggregate("[emoji=", (current, bi)
                     => current + bi.ToString("X2")) + "]";
         }
 
