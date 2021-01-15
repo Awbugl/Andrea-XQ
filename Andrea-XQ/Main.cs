@@ -59,6 +59,15 @@ namespace Andrea_XQ
             }
         }
 
+        [DllExport(ExportName = "XQ_DestroyPlugin", CallingConvention = CallingConvention.StdCall)]
+        public static int XQ_DestroyPlugin() => Destory();
+
+        private static int Destory()
+        {
+            Deinitialize();
+            return 0;
+        }
+
         [DllExport(ExportName = "XQ_SetUp", CallingConvention = CallingConvention.StdCall)]
         public static int XQ_SetUp() => 0;
 
@@ -110,7 +119,7 @@ namespace Andrea_XQ
                         Initialize(Api);
                         return 1;
 
-                    case 12003:// PluginClicked:
+                    case 12002:// PluginClosed:
                         Deinitialize();
                         return 1;
 
