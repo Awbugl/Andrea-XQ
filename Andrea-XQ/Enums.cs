@@ -1,4 +1,4 @@
-﻿namespace Andrea_XQ
+﻿namespace Andrea.XQ
 {
 /*
     public enum XqEventType
