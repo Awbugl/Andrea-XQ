@@ -4,29 +4,73 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+
 using Andrea.Interface;
-using Andrea.Model;
 
 namespace Andrea.XQ
 {
+    internal static class EncodingConverter
+    {
+        /// <summary>
+        ///     将文本中的编码错位部分转换成Emoji码
+        /// </summary>
+        /// <param name="utf8String">要发送的消息</param>
+        /// <returns></returns>
+        public static string Utf8ToSendString(this string utf8String)
+        {
+            return BytesToString(Encoding.Convert(Encoding.UTF8, Gb18030, Encoding.UTF8.GetBytes(utf8String)));
+        }
+
+        private static string BytesToString(byte[] bin)
+        {
+            var length = bin.Length;
+            var sb = new StringBuilder();
+            for (var i = 0; i < length - 1;)
+                sb.Append(EncodingGetString(Gb18030, bin, ref i, bin[i] < 0x80 ? 1 : bin[i + 1] > 0x3F ? 2 : 4));
+            if (length > 1 && bin[length - 2] > 0x80) return sb.ToString();
+            sb.Append(Gb18030.GetString(bin, length - 1, 1));
+            return sb.ToString();
+        }
+
+        /// <summary>
+        ///     使用Gb18030编码
+        /// </summary>
+        private static string EncodingGetString(Encoding encoding, byte[] bin, ref int index, int count)
+        {
+            index += count;
+
+            return count < 4
+                ? encoding.GetString(bin, index - count, count)
+                : Encoding.Convert(encoding, Encoding.UTF8,
+                    bin.Skip(index - count).Take(4).ToArray()).Aggregate("[emoji=", (current, bi)
+                    => current + bi.ToString("X2")) + "]";
+        }
+
+        private static readonly Encoding
+            Gb18030 = Encoding.GetEncoding("gb18030");
+
+        internal static string Convert(this string utf8String) => Utf8ToSendString(utf8String);
+
+    }
+
+
     internal class XqApi : IAndreaApi
     {
-
         public int SendFriendMessage(string robotqq, long qq, string messages)
         {
-            Xqdll.SendMsg(Main.Authid, robotqq, 1, "", qq.ToString(), messages, 0);
+            Xqdll.SendMsg(Main.Authid, robotqq, 1, "", qq.ToString(), messages.Convert(), 0);
             return 1;
         }
 
         public int SendGroupMessage(string robotqq, long group, string messages)
         {
-            Xqdll.SendMsg(Main.Authid, robotqq, 2, group.ToString(), "", messages, 0);
+            Xqdll.SendMsg(Main.Authid, robotqq, 2, group.ToString(), "", messages.Convert(), 0);
             return 1;
         }
 
         public int SendTempMessage(string robotqq, long qq, long group, string messages)
         {
-            Xqdll.SendMsg(Main.Authid, robotqq, 4, group.ToString(), qq.ToString(), messages, 0);
+            Xqdll.SendMsg(Main.Authid, robotqq, 4, group.ToString(), qq.ToString(), messages.Convert(), 0);
             return 1;
         }
 
@@ -55,6 +99,7 @@ namespace Andrea.XQ
         {
             try
             {
+                if (intPtr == IntPtr.Zero) return "";
                 Encoding gb18030 = Encoding.GetEncoding("gb18030");
                 var length = Marshal.ReadInt32(intPtr);
                 if (length <= 0) return "";

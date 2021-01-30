@@ -96,16 +96,26 @@ namespace Andrea.XQ
                         Xqdll.HandleFriendEvent(Authid, robotQq, fromQq, 10, "");
                         return 1;
 
+                    case 202:// SomeoneBeRemovedFromGroup
+                    case 203:// SomeoneBeBannedSpeaking 
+                        if (targetQq == robotQq)
+                        {
+                            AddToSheildList(fromGroupInt64, 1);
+                            AddToSheildList(fromQqInt64, 0);
+                        }
+                        if(eventType == 202) DeleteGroup(fromGroupInt64);
+                        return 1;
+
                     case 214:// BeInvitedToGroup:
-                        bool isAdmin = robotQq != "2967373629" && XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQqInt64);
-                        string message = isAdmin ? "" : robotQq == "2967373629"
-                            ? "Andrea暂停加群，请邀请Beatrice或Cadilotta(2708288417)。"
-                            : "抱歉，您不是群管理员。";
+                        bool isAdmin = !SheildCheck(fromGroupInt64) && robotQq == "2708288417" && XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQqInt64);
+                        string message = isAdmin ? "" : robotQq != "2708288417"
+                            ? "Andrea、Beatrice群聊数量已达上限，请邀请Cadilotta(2708288417)。" : SheildCheck(fromGroupInt64)
+                            ? "本群处于屏蔽期。" : "抱歉，您不是群管理员。";
 
                         Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20, message);
-
+                        
                         AwReport($"[BeInvitedToGroupEvent]\nFromQQ : {fromQqInt64}\nRobotQQ : {robotQq}\nFromGroup : {fromGroupInt64}\nState : {(isAdmin ? "Agree" : "Disagree")}");
-
+                      
                         return 1;
 
                     case 12001:// PluginEnable:
