@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+
 using static Andrea.Expander;
 // ReSharper disable CommentTypo
 
@@ -43,6 +44,8 @@ namespace Andrea.XQ
         {
             try
             {
+                AppDomain.CurrentDomain.UnhandledException +=
+                    (sender, args) => ExceptionReport(args.ExceptionObject as Exception);
                 return File.ReadAllText(@"Andrea\Other\Andrea.json");
             }
             catch (Exception ex)
@@ -57,8 +60,17 @@ namespace Andrea.XQ
 
         private static int Destory()
         {
-            Deinitialize();
-            return 0;
+            try
+            {
+                Deinitialize();
+                AppDomain.CreateDomain("Unload").DoCallBack(() => AppDomain.Unload(AppDomain.CurrentDomain));
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ExceptionReport(ex);
+                return 1;
+            }
         }
 
         [DllExport(ExportName = "XQ_SetUp", CallingConvention = CallingConvention.StdCall)]
@@ -103,7 +115,7 @@ namespace Andrea.XQ
                             AddToSheildList(fromGroupInt64, 1);
                             AddToSheildList(fromQqInt64, 0);
                         }
-                        if(eventType == 202) DeleteGroup(fromGroupInt64);
+                        if (eventType == 202) DeleteGroup(fromGroupInt64);
                         return 1;
 
                     case 214:// BeInvitedToGroup:
@@ -113,9 +125,9 @@ namespace Andrea.XQ
                             ? "本群处于屏蔽期。" : "抱歉，您不是群管理员。";
 
                         Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20, message);
-                        
+
                         AwReport($"[BeInvitedToGroupEvent]\nFromQQ : {fromQqInt64}\nRobotQQ : {robotQq}\nFromGroup : {fromGroupInt64}\nState : {(isAdmin ? "Agree" : "Disagree")}");
-                      
+
                         return 1;
 
                     case 12001:// PluginEnable:
