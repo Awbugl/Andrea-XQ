@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Andrea.XQ</RootNamespace>
-    <AssemblyName>Andrea.XQ</AssemblyName>
+    <AssemblyName>AndreaBot.XQ</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -89,7 +89,7 @@ if exist "$(TargetDir)$(TargetName)\app.json" (del /F /A /Q "$(TargetDir)$(Targe
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>if exist "$(TargetDir)$(TargetName).dll" (
-move "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\$(TargetName).dll" 
+move "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\AndreaBot.XQ.dll" 
 )</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
