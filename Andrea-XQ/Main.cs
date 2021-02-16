@@ -119,9 +119,8 @@ namespace Andrea.XQ
                         return 1;
 
                     case 214:// BeInvitedToGroup:
-                        bool isAdmin = !SheildCheck(fromGroupInt64) && robotQq == "2708288417" && XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQqInt64);
-                        string message = isAdmin ? "" : robotQq != "2708288417"
-                            ? "Andrea、Beatrice群聊数量已达上限，请邀请Cadilotta(2708288417)。" : SheildCheck(fromGroupInt64)
+                        bool isAdmin = !SheildCheck(fromGroupInt64) && XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQqInt64);
+                        string message = isAdmin ? "" : SheildCheck(fromGroupInt64)
                             ? "本群处于屏蔽期。" : "抱歉，您不是群管理员。";
 
                         Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20, message);
