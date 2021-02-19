@@ -90,7 +90,12 @@ namespace Andrea.XQ
                 switch (eventType)
                 {
                     case 1:// Friend:
-                        if (CheckToShield(false, 0, robotQq, content, out string[] messageArrayFriend)) return 1;
+                        if (CheckToShield(false, 0, robotQq, content, out string[] messageArrayFriend))
+                        {
+                            EventReport("FriendMessage", robotQq, fromQqInt64,-1, content);
+                            return 1;
+                        }
+
                         Process(0, Api, robotQq, 0, fromQqInt64, messageArrayFriend);
                         return 1;
 
@@ -100,7 +105,12 @@ namespace Andrea.XQ
                         return 1;
 
                     case 4:// GroupTmp:
-                        if (CheckToShield(false, fromGroupInt64, robotQq, content, out string[] messageArrayTemp)) return 1;
+                        if (CheckToShield(false, fromGroupInt64, robotQq, content, out string[] messageArrayTemp))
+                        {
+                            EventReport("TempMessage", robotQq, fromQqInt64, -1, content);
+                            return 1;
+                        }
+
                         Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayTemp);
                         return 1;
 
@@ -124,8 +134,7 @@ namespace Andrea.XQ
                             ? "本群处于屏蔽期。" : "抱歉，您不是群管理员。";
 
                         Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20, message);
-
-                        AwReport($"[BeInvitedToGroupEvent]\nFromQQ : {fromQqInt64}\nRobotQQ : {robotQq}\nFromGroup : {fromGroupInt64}\nState : {(isAdmin ? "Agree" : "Disagree")}");
+                        EventReport("GroupInvitation", robotQq, fromQqInt64, fromGroupInt64, isAdmin ? "Agree" : "Disagree");
 
                         return 1;
 
