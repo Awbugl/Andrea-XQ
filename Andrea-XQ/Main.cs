@@ -90,26 +90,20 @@ namespace Andrea.XQ
                 switch (eventType)
                 {
                     case 1:// Friend:
-                        if (CheckToShield(false, 0, robotQq, content, out string[] messageArrayFriend))
-                        {
-                            EventReport("FriendMessage", robotQq, fromQqInt64,-1, content);
+                        if (CheckToShield(false, 0, fromQqInt64,robotQq, content, out string[] messageArrayFriend))
                             return 1;
-                        }
 
                         Process(0, Api, robotQq, 0, fromQqInt64, messageArrayFriend);
                         return 1;
 
                     case 2:// Group:
-                        if (CheckToShield(true, fromGroupInt64, robotQq, content, out string[] messageArrayGroup)) return 1;
+                        if (CheckToShield(true, fromGroupInt64, fromQqInt64, robotQq, content, out string[] messageArrayGroup)) return 1;
                         Process(1, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayGroup);
                         return 1;
 
                     case 4:// GroupTmp:
-                        if (CheckToShield(false, fromGroupInt64, robotQq, content, out string[] messageArrayTemp))
-                        {
-                            EventReport("TempMessage", robotQq, fromQqInt64, -1, content);
+                        if (CheckToShield(false, fromGroupInt64, fromQqInt64,robotQq, content, out string[] messageArrayTemp))
                             return 1;
-                        }
 
                         Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayTemp);
                         return 1;
@@ -129,7 +123,7 @@ namespace Andrea.XQ
                         return 1;
 
                     case 214:// BeInvitedToGroup:
-                        bool isAdmin = !SheildCheck(fromGroupInt64) && XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQqInt64);
+                        bool isAdmin = !SheildCheck(fromGroupInt64) && (fromQqInt64 == 1941232341L || XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQqInt64));
                         string message = isAdmin ? "" : SheildCheck(fromGroupInt64)
                             ? "本群处于屏蔽期。" : "抱歉，您不是群管理员。";
 
