@@ -90,7 +90,7 @@ namespace Andrea.XQ
                 switch (eventType)
                 {
                     case 1:// Friend:
-                        if (CheckToShield(false, 0, fromQqInt64,robotQq, content, out string[] messageArrayFriend))
+                        if (CheckToShield(false, 0, fromQqInt64, robotQq, content, out string[] messageArrayFriend))
                             return 1;
 
                         Process(0, Api, robotQq, 0, fromQqInt64, messageArrayFriend);
@@ -102,7 +102,7 @@ namespace Andrea.XQ
                         return 1;
 
                     case 4:// GroupTmp:
-                        if (CheckToShield(false, fromGroupInt64, fromQqInt64,robotQq, content, out string[] messageArrayTemp))
+                        if (CheckToShield(false, fromGroupInt64, fromQqInt64, robotQq, content, out string[] messageArrayTemp))
                             return 1;
 
                         Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayTemp);
@@ -114,12 +114,12 @@ namespace Andrea.XQ
 
                     case 202:// SomeoneBeRemovedFromGroup
                     case 203:// SomeoneBeBannedSpeaking 
-                        if (targetQq == robotQq)
-                        {
-                            AddToSheildList(fromGroupInt64, 1);
-                            AddToSheildList(fromQqInt64, 0);
-                        }
+                        if (targetQq != robotQq) return 1;
+
+                        AddToSheildList(fromGroupInt64, 1);
+                        AddToSheildList(fromQqInt64, 0);
                         if (eventType == 202) DeleteGroup(fromGroupInt64);
+
                         return 1;
 
                     case 214:// BeInvitedToGroup:

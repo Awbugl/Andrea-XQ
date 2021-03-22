@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Andrea.XQ
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
-    [SuppressMessage("ReSharper", "CommentTypo")]
     public class Xqdll
     {
         [DllImport("xqapi.dll", CharSet = CharSet.Ansi, EntryPoint = "S3_Api_GetGroupAdmin")]
         public static extern IntPtr GetGroupAdmin(byte[] autoid, string robotQq, string group);
-        
-        [DllImport("xqapi.dll", CharSet = CharSet.Ansi, EntryPoint = "S3_Api_SendMsg")]
-        public static extern void SendMsg(byte[] autoid, string robotQq, int messageType, string group, string qq, string message, int bubbleId);
 
         [DllImport("xqapi.dll", CharSet = CharSet.Ansi, EntryPoint = "S3_Api_HandleFriendEvent")]
         public static extern void HandleFriendEvent(byte[] autoid, string robotQq, string qq, int messageType, string message);
@@ -25,7 +19,14 @@ namespace Andrea.XQ
 
         [DllImport("xqapi.dll", CharSet = CharSet.Ansi, EntryPoint = "S3_Api_QuitGroup")]
         public static extern void QuitGroup(byte[] autoid, string robotQq, string group);
-        
+
+        [DllImport("xqapi.dll", CharSet = CharSet.Ansi, EntryPoint = "S3_Api_SendMsg")]
+        public static extern void SendMsg(byte[] autoid, string robotQq, int messageType, string group, string qq, string message, int bubbleId);
+
+        [DllImport("xqapi.dll", CharSet = CharSet.Ansi, EntryPoint = "S3_Api_SendXML")]
+        public static extern void SendXML(byte[] autoid, string robotQq, int sendType, int messageType, string group,
+            string qq, string xmlMessage);
+
         [DllImport("kernel32.dll", EntryPoint = "GetProcessHeap")]
         public static extern int GetProcessHeap();
 

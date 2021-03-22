@@ -24,6 +24,24 @@ namespace Andrea.XQ
             return 1;
         }
 
+        public int SendGroupXmlMessage(string robotqq, long group, string xmlMessage)
+        {
+            Xqdll.SendXML(Main.Authid, robotqq, 1, 2, group.ToString(), "", xmlMessage.Utf8ToSendString());
+            return 1;
+        }
+
+        public int SendFriendXmlMessage(string robotqq, long qq, string xmlMessage)
+        {
+            Xqdll.SendXML(Main.Authid, robotqq, 1, 1, "", qq.ToString(), xmlMessage.Utf8ToSendString());
+            return 1;
+        }
+
+        public int SendTempXmlMessage(string robotqq, long qq, long group, string xmlMessage)
+        {
+            Xqdll.SendXML(Main.Authid, robotqq, 1, 4, group.ToString(), qq.ToString(), xmlMessage.Utf8ToSendString());
+            return 1;
+        }
+
         public int ExitGroup(string robotqq, long group)
         {
             Xqdll.QuitGroup(Main.Authid, robotqq, group.ToString());
