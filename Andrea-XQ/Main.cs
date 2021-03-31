@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-
 using static Andrea.Expander;
+
 // ReSharper disable CommentTypo
 
 // ReSharper disable UnusedMember.Global
@@ -77,10 +77,13 @@ namespace Andrea.XQ
         public static int XQ_SetUp() => 0;
 
         [DllExport(ExportName = "XQ_Event", CallingConvention = CallingConvention.StdCall)]
-        public static int XQ_Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq, string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
-            => Event(robotQq, eventType, extraType, fromGroup, fromQq, targetQq, content, index, msgid, udpmsg, unix, p);
+        public static int XQ_Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
+            string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
+            => Event(robotQq, eventType, extraType, fromGroup, fromQq, targetQq, content, index, msgid, udpmsg, unix,
+                p);
 
-        public static int Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq, string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
+        public static int Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
+            string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
         {
             try
             {
@@ -89,31 +92,33 @@ namespace Andrea.XQ
 
                 switch (eventType)
                 {
-                    case 1:// Friend:
+                    case 1: // Friend:
                         if (CheckToShield(false, 0, fromQqInt64, robotQq, content, out string[] messageArrayFriend))
                             return 1;
 
                         Process(0, Api, robotQq, 0, fromQqInt64, messageArrayFriend);
                         return 1;
 
-                    case 2:// Group:
-                        if (CheckToShield(true, fromGroupInt64, fromQqInt64, robotQq, content, out string[] messageArrayGroup)) return 1;
+                    case 2: // Group:
+                        if (CheckToShield(true, fromGroupInt64, fromQqInt64, robotQq, content,
+                            out string[] messageArrayGroup)) return 1;
                         Process(1, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayGroup);
                         return 1;
 
-                    case 4:// GroupTmp:
-                        if (CheckToShield(false, fromGroupInt64, fromQqInt64, robotQq, content, out string[] messageArrayTemp))
+                    case 4: // GroupTmp:
+                        if (CheckToShield(false, fromGroupInt64, fromQqInt64, robotQq, content,
+                            out string[] messageArrayTemp))
                             return 1;
 
                         Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayTemp);
                         return 1;
 
-                    case 101:// AddFriend:
+                    case 101: // AddFriend:
                         Xqdll.HandleFriendEvent(Authid, robotQq, fromQq, 10, "");
                         return 1;
 
-                    case 202:// SomeoneBeRemovedFromGroup
-                    case 203:// SomeoneBeBannedSpeaking 
+                    case 202: // SomeoneBeRemovedFromGroup
+                    case 203: // SomeoneBeBannedSpeaking 
                         if (targetQq != robotQq) return 1;
 
                         AddToSheildList(fromGroupInt64, 1);
@@ -122,21 +127,28 @@ namespace Andrea.XQ
 
                         return 1;
 
-                    case 214:// BeInvitedToGroup:
-                        bool isAdmin = !SheildCheck(fromGroupInt64) && (fromQqInt64 == 1941232341L || XqApi.GetGroupAdminList(robotQq, fromGroupInt64).Contains(fromQqInt64));
-                        string message = isAdmin ? "" : SheildCheck(fromGroupInt64)
-                            ? "本群处于屏蔽期。" : "抱歉，您不是群管理员。";
+                    case 214: // BeInvitedToGroup:
+                        bool isAdmin = !SheildCheck(fromGroupInt64) && (fromQqInt64 == 1941232341L ||
+                                                                        XqApi.GetGroupAdminList(robotQq, fromGroupInt64)
+                                                                            .Contains(fromQqInt64));
+                        string message = isAdmin
+                            ? ""
+                            : SheildCheck(fromGroupInt64)
+                                ? "本群处于屏蔽期。"
+                                : "抱歉，您不是群管理员。";
 
-                        Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20, message);
-                        EventReport("GroupInvitation", robotQq, fromQqInt64, fromGroupInt64, isAdmin ? "Agree" : "Disagree");
+                        Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20,
+                            message);
+                        EventReport("GroupInvitation", robotQq, fromQqInt64, fromGroupInt64,
+                            isAdmin ? "Agree" : "Disagree");
 
                         return 1;
 
-                    case 12001:// PluginEnable:
+                    case 12001: // PluginEnable:
                         Initialize(Api);
                         return 1;
 
-                    case 12002:// PluginClosed:
+                    case 12002: // PluginClosed:
                         Deinitialize();
                         return 1;
 

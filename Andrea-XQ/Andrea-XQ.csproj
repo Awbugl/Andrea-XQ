@@ -57,6 +57,9 @@
     <Compile Include="Xqdll.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
