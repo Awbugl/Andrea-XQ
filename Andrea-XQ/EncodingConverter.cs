@@ -67,7 +67,7 @@ namespace Andrea.XQ
             {
                 if (Xqdll.HeapFree(Xqdll.GetProcessHeap(), 0, intPtr) == 0)
                 {
-                    int err = Marshal.GetLastWin32Error();
+                    var err = Marshal.GetLastWin32Error();
                     if (err != 0) Expander.ExceptionReport(new Win32Exception(err));
                 }
             }

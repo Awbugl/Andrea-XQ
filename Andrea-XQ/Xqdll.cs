@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Andrea.XQ
 {
-    public class Xqdll
+    public static class Xqdll
     {
         [DllImport("xqapi.dll", CharSet = CharSet.Ansi, EntryPoint = "S3_Api_GetGroupAdmin")]
         public static extern IntPtr GetGroupAdmin(byte[] autoid, string robotQq, string group);

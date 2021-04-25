@@ -18,10 +18,16 @@ namespace Andrea.XQ
         public static byte[] Authid = new byte[8];
 
         [DllExport(ExportName = "XQ_AuthId", CallingConvention = CallingConvention.StdCall)]
-        public static void XQ_AuthId(int id, int i) => AuthId(id, i);
+        public static void XQ_AuthId(int id, int i)
+        {
+            AuthId(id, i);
+        }
 
         [DllExport(ExportName = "XQ_AutoId", CallingConvention = CallingConvention.StdCall)]
-        public static void XQ_AutoId(int id, int i) => AuthId(id, i);
+        public static void XQ_AutoId(int id, int i)
+        {
+            AuthId(id, i);
+        }
 
         public static void AuthId(int id, int i)
         {
@@ -38,7 +44,10 @@ namespace Andrea.XQ
         }
 
         [DllExport(ExportName = "XQ_Create", CallingConvention = CallingConvention.StdCall)]
-        public static string XQ_Create(string frameworkversion) => Create();
+        public static string XQ_Create(string frameworkversion)
+        {
+            return Create();
+        }
 
         public static string Create()
         {
@@ -56,7 +65,10 @@ namespace Andrea.XQ
         }
 
         [DllExport(ExportName = "XQ_DestroyPlugin", CallingConvention = CallingConvention.StdCall)]
-        public static int XQ_DestroyPlugin() => Destory();
+        public static int XQ_DestroyPlugin()
+        {
+            return Destory();
+        }
 
         private static int Destory()
         {
@@ -74,26 +86,32 @@ namespace Andrea.XQ
         }
 
         [DllExport(ExportName = "XQ_SetUp", CallingConvention = CallingConvention.StdCall)]
-        public static int XQ_SetUp() => 0;
+        public static int XQ_SetUp()
+        {
+            return 0;
+        }
 
         [DllExport(ExportName = "XQ_Event", CallingConvention = CallingConvention.StdCall)]
         public static int XQ_Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
             string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
-            => Event(robotQq, eventType, extraType, fromGroup, fromQq, targetQq, content, index, msgid, udpmsg, unix,
+        {
+            return Event(robotQq, eventType, extraType, fromGroup, fromQq, targetQq, content, index, msgid, udpmsg,
+                unix,
                 p);
+        }
 
         public static int Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
             string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
         {
             try
             {
-                long.TryParse(fromQq, out long fromQqInt64);
-                long.TryParse(fromGroup, out long fromGroupInt64);
+                long.TryParse(fromQq, out var fromQqInt64);
+                long.TryParse(fromGroup, out var fromGroupInt64);
 
                 switch (eventType)
                 {
                     case 1: // Friend:
-                        if (CheckToShield(false, 0, fromQqInt64, robotQq, content, out string[] messageArrayFriend))
+                        if (CheckToShield(false, 0, fromQqInt64, robotQq, content, out var messageArrayFriend))
                             return 1;
 
                         Process(0, Api, robotQq, 0, fromQqInt64, messageArrayFriend);
@@ -101,13 +119,13 @@ namespace Andrea.XQ
 
                     case 2: // Group:
                         if (CheckToShield(true, fromGroupInt64, fromQqInt64, robotQq, content,
-                            out string[] messageArrayGroup)) return 1;
+                            out var messageArrayGroup)) return 1;
                         Process(1, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayGroup);
                         return 1;
 
                     case 4: // GroupTmp:
                         if (CheckToShield(false, fromGroupInt64, fromQqInt64, robotQq, content,
-                            out string[] messageArrayTemp))
+                            out var messageArrayTemp))
                             return 1;
 
                         Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayTemp);
@@ -128,10 +146,10 @@ namespace Andrea.XQ
                         return 1;
 
                     case 214: // BeInvitedToGroup:
-                        bool isAdmin = !SheildCheck(fromGroupInt64) && (fromQqInt64 == 1941232341L ||
-                                                                        XqApi.GetGroupAdminList(robotQq, fromGroupInt64)
-                                                                            .Contains(fromQqInt64));
-                        string message = isAdmin
+                        var isAdmin = !SheildCheck(fromGroupInt64) && (fromQqInt64 == 1941232341L ||
+                                                                       XqApi.GetGroupAdminList(robotQq, fromGroupInt64)
+                                                                           .Contains(fromQqInt64));
+                        var message = isAdmin
                             ? ""
                             : SheildCheck(fromGroupInt64)
                                 ? "本群处于屏蔽期。"

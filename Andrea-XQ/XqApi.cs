@@ -47,8 +47,10 @@ namespace Andrea.XQ
             return 1;
         }
 
-        public string GetQqNick(string robotqq, long qq) =>
-            Xqdll.GetNick(Main.Authid, robotqq, qq.ToString()).IntPtrToString();
+        public string GetQqNick(string robotqq, long qq)
+        {
+            return Xqdll.GetNick(Main.Authid, robotqq, qq.ToString()).IntPtrToString();
+        }
 
         public bool GetGroupPermission(string robotqq, long adminqq, long group)
         {
