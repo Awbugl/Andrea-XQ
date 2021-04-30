@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using static Andrea.Expander;
+using static Andrea.Core.Expander;
 
 // ReSharper disable CommentTypo
 
