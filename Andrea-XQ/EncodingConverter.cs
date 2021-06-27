@@ -11,12 +11,12 @@ namespace Andrea.XQ
 {
     internal static class EncodingConverter
     {
-        private static readonly Lazy<Regex> Reg = new Lazy<Regex>(() =>
+        private static readonly Lazy<Regex> Reg = new(() =>
             new Regex("(&nbsp;|\\[em\\](e[0-9]{1,6})\\[\\/em\\])", RegexOptions.IgnoreCase | RegexOptions.ECMAScript));
 
         private static readonly Encoding Gb18030 = Encoding.GetEncoding("gb18030");
 
-        internal static List<string> SplitToList(this string str)
+        internal static IEnumerable<string> SplitToList(this string str)
         {
             return str.Split(new[] {'\n'}, StringSplitOptions.RemoveEmptyEntries).Select(i => i.Trim()).ToList();
         }
@@ -37,13 +37,19 @@ namespace Andrea.XQ
                 else
                 {
                     var codePoint = int.Parse(m[2].Value.Substring(1));
-                    if (codePoint > 200000)
-                        ret.Append(
-                            $"[emoji={Encoding.Convert(Encoding.UTF32, Encoding.UTF8, BitConverter.GetBytes(codePoint - 200000)).Aggregate("", (current, i) => current + i.ToString("X2"))}]");
-                    else if (codePoint >= 100000)
-                        ret.Append($"[Face{codePoint - 100000}.gif]");
-                    else
-                        ret.Append($"[pic=http://qzonestyle.gtimg.cn/qzone/em/{m[2].Value}.gif]");
+                    switch (codePoint)
+                    {
+                        case > 200000:
+                            ret.Append(
+                                $"[emoji={Encoding.Convert(Encoding.UTF32, Encoding.UTF8, BitConverter.GetBytes(codePoint - 200000)).Aggregate("", (current, i) => current + i.ToString("X2"))}]");
+                            break;
+                        case >= 100000:
+                            ret.Append($"[Face{codePoint - 100000}.gif]");
+                            break;
+                        default:
+                            ret.Append($"[pic=http://qzonestyle.gtimg.cn/qzone/em/{m[2].Value}.gif]");
+                            break;
+                    }
                 }
 
                 last += rslt.Index + rslt.Length;

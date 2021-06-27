@@ -12,10 +12,10 @@ using static Andrea.Core.Expander;
 
 namespace Andrea.XQ
 {
-    public static class Main
+    internal static class Main
     {
-        private static readonly XqApi Api = new XqApi();
-        public static byte[] Authid = new byte[8];
+        private static readonly XqApi Api = new();
+        internal static byte[] Authid = new byte[8];
 
         [DllExport(ExportName = "XQ_AuthId", CallingConvention = CallingConvention.StdCall)]
         public static void XQ_AuthId(int id, int i)
@@ -29,7 +29,7 @@ namespace Andrea.XQ
             AuthId(id, i);
         }
 
-        public static void AuthId(int id, int i)
+        private static void AuthId(int id, int i)
         {
             try
             {
@@ -49,12 +49,12 @@ namespace Andrea.XQ
             return Create();
         }
 
-        public static string Create()
+        private static string Create()
         {
             try
             {
                 AppDomain.CurrentDomain.UnhandledException +=
-                    (sender, args) => ExceptionReport(args.ExceptionObject as Exception);
+                    (_, args) => ExceptionReport(args.ExceptionObject as Exception);
                 return File.ReadAllText(@"Andrea\Other\Andrea.json");
             }
             catch (Exception ex)
@@ -95,13 +95,11 @@ namespace Andrea.XQ
         public static int XQ_Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
             string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
         {
-            return Event(robotQq, eventType, extraType, fromGroup, fromQq, targetQq, content, index, msgid, udpmsg,
-                unix,
-                p);
+            return Event(robotQq, eventType, fromGroup, fromQq, targetQq, content, udpmsg);
         }
 
-        public static int Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
-            string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
+        private static int Event(string robotQq, int eventType, string fromGroup, string fromQq,
+            string targetQq, string content, string udpmsg)
         {
             try
             {
@@ -114,13 +112,13 @@ namespace Andrea.XQ
                         if (CheckToShield(false, 0, fromQqInt64, robotQq, content, out var messageArrayFriend))
                             return 1;
 
-                        Process(0, Api, robotQq, 0, fromQqInt64, messageArrayFriend);
+                        Process(0, Api, robotQq, 0, fromQqInt64, content, messageArrayFriend);
                         return 1;
 
                     case 2: // Group:
                         if (CheckToShield(true, fromGroupInt64, fromQqInt64, robotQq, content,
                             out var messageArrayGroup)) return 1;
-                        Process(1, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayGroup);
+                        Process(1, Api, robotQq, fromGroupInt64, fromQqInt64, content, messageArrayGroup);
                         return 1;
 
                     case 4: // GroupTmp:
@@ -128,7 +126,7 @@ namespace Andrea.XQ
                             out var messageArrayTemp))
                             return 1;
 
-                        Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, messageArrayTemp);
+                        Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, content, messageArrayTemp);
                         return 1;
 
                     case 101: // AddFriend:
@@ -146,7 +144,7 @@ namespace Andrea.XQ
                         return 1;
 
                     case 214: // BeInvitedToGroup:
-                        var isAdmin = !SheildCheck(fromGroupInt64) && (fromQqInt64 == 1941232341L ||
+                        var isAdmin = !SheildCheck(fromGroupInt64) && (fromQqInt64 is 1941232341L or 3368228552L ||
                                                                        XqApi.GetGroupAdminList(robotQq, fromGroupInt64)
                                                                            .Contains(fromQqInt64));
                         var message = isAdmin
