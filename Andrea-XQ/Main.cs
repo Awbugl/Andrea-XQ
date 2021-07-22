@@ -155,9 +155,7 @@ namespace Andrea.XQ
 
                         Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20,
                             message);
-                        EventReport("GroupInvitation", robotQq, fromQqInt64, fromGroupInt64,
-                            isAdmin ? "Agree" : "Disagree");
-
+                       
                         return 1;
 
                     case 12001: // PluginEnable:

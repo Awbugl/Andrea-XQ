@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using Andrea.Interface;
 
 namespace Andrea.XQ
@@ -61,6 +62,21 @@ namespace Andrea.XQ
         {
             return Xqdll.GetGroupAdmin(Main.Authid, robotqq, group.ToString()).IntPtrToString().SplitToList()
                 .Select(long.Parse).ToArray();
+        }
+        
+        public void ReloginRobotList()
+        {
+            foreach (var robot in Xqdll.GetOnLineList(Main.Authid).IntPtrToString().SplitToList())
+            {
+                Xqdll.OffLineQQ(Main.Authid, robot);
+            }
+            
+            Thread.Sleep(2000);
+
+            foreach (var robot in Xqdll.GetQQList(Main.Authid).IntPtrToString().SplitToList())
+            {
+                Xqdll.LoginQQ(Main.Authid, robot);
+            }
         }
     }
 }
