@@ -1,4 +1,0 @@
-﻿[*.cs]
-
-# IDE0079: 请删除不必要的忽略
-dotnet_diagnostic.IDE0079.severity = none

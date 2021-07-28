@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Andrea-XQ Layer", "Andrea-XQ Layer\Andrea-XQ Layer.csproj", "{78EBA69E-9178-4835-8EC0-A4854B52DE98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreaBot", "..\AndreaBot\AndreaBot.csproj", "{D07B174E-A7A9-4D02-B083-171FDA691E12}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78EBA69E-9178-4835-8EC0-A4854B52DE98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78EBA69E-9178-4835-8EC0-A4854B52DE98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78EBA69E-9178-4835-8EC0-A4854B52DE98}.Release|Any CPU.ActiveCfg = Release|X86
+		{78EBA69E-9178-4835-8EC0-A4854B52DE98}.Release|Any CPU.Build.0 = Release|X86
+		{D07B174E-A7A9-4D02-B083-171FDA691E12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D07B174E-A7A9-4D02-B083-171FDA691E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D07B174E-A7A9-4D02-B083-171FDA691E12}.Release|Any CPU.ActiveCfg = Release|X86
+		{D07B174E-A7A9-4D02-B083-171FDA691E12}.Release|Any CPU.Build.0 = Release|X86
+	EndGlobalSection
+EndGlobal
