@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading;
-using Andrea.Interface;
+using AndreaBot.Core;
 
-namespace Andrea.XQ
+namespace AndreaBot.XQ
 {
     internal class XqApi : IAndreaApi
     {

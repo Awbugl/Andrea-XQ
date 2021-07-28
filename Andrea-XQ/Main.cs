@@ -1,16 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using static Andrea.Core.Expander;
 
-// ReSharper disable CommentTypo
+using static AndreaBot.Core.External;
 
-// ReSharper disable UnusedMember.Global
-
-#pragma warning disable IDE0060
-
-namespace Andrea.XQ
+namespace AndreaBot.XQ
 {
     internal static class Main
     {
@@ -23,18 +17,11 @@ namespace Andrea.XQ
             AuthId(id, i);
         }
 
-        [DllExport(ExportName = "XQ_AutoId", CallingConvention = CallingConvention.StdCall)]
-        public static void XQ_AutoId(int id, int i)
-        {
-            AuthId(id, i);
-        }
-
         private static void AuthId(int id, int i)
         {
             try
             {
                 Authid = BitConverter.GetBytes(id).Concat(BitConverter.GetBytes(i)).ToArray();
-                CosturaUtility.Initialize();
                 Initialize(Api);
             }
             catch (Exception ex)
@@ -55,7 +42,8 @@ namespace Andrea.XQ
             {
                 AppDomain.CurrentDomain.UnhandledException +=
                     (_, args) => ExceptionReport(args.ExceptionObject as Exception);
-                return File.ReadAllText(@"Andrea\Other\Andrea.json");
+                return
+                    @"{""name"":""AndreaBot"",""pver"":""3.0.0"",""sver"": 3,""author"":""littlenine12"",""desc"":""AndreaBot""}";
             }
             catch (Exception ex)
             {
@@ -109,24 +97,15 @@ namespace Andrea.XQ
                 switch (eventType)
                 {
                     case 1: // Friend:
-                        if (CheckToShield(false, 0, fromQqInt64, robotQq, content, out var messageArrayFriend))
-                            return 1;
-
-                        Process(0, Api, robotQq, 0, fromQqInt64, content, messageArrayFriend);
+                        Process(0, Api, robotQq, 0, fromQqInt64, content);
                         return 1;
 
                     case 2: // Group:
-                        if (CheckToShield(true, fromGroupInt64, fromQqInt64, robotQq, content,
-                            out var messageArrayGroup)) return 1;
-                        Process(1, Api, robotQq, fromGroupInt64, fromQqInt64, content, messageArrayGroup);
+                        Process(1, Api, robotQq, fromGroupInt64, fromQqInt64, content);
                         return 1;
 
                     case 4: // GroupTmp:
-                        if (CheckToShield(false, fromGroupInt64, fromQqInt64, robotQq, content,
-                            out var messageArrayTemp))
-                            return 1;
-
-                        Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, content, messageArrayTemp);
+                        Process(2, Api, robotQq, fromGroupInt64, fromQqInt64, content);
                         return 1;
 
                     case 101: // AddFriend:
@@ -155,7 +134,7 @@ namespace Andrea.XQ
 
                         Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20,
                             message);
-                       
+
                         return 1;
 
                     case 12001: // PluginEnable:

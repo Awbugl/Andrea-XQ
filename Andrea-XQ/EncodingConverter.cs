@@ -5,9 +5,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using Andrea.Core;
+using AndreaBot.Core;
 
-namespace Andrea.XQ
+namespace AndreaBot.XQ
 {
     internal static class EncodingConverter
     {
@@ -75,7 +75,7 @@ namespace Andrea.XQ
                 if (Xqdll.HeapFree(Xqdll.GetProcessHeap(), 0, intPtr) == 0)
                 {
                     var err = Marshal.GetLastWin32Error();
-                    if (err != 0) Expander.ExceptionReport(new Win32Exception(err));
+                    if (err != 0) External.ExceptionReport(new Win32Exception(err));
                 }
             }
         }
