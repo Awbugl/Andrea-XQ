@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-
 using static AndreaBot.Core.External;
 
 namespace AndreaBot.XQ
@@ -63,7 +62,8 @@ namespace AndreaBot.XQ
             try
             {
                 Deinitialize();
-                AppDomain.CreateDomain("Unload").DoCallBack(() => AppDomain.Unload(AppDomain.CurrentDomain));
+                var act = new Action(() => AppDomain.Unload(AppDomain.CurrentDomain));
+                AppDomain.CreateDomain("Unload").DoCallBack(act.Invoke);
                 return 1;
             }
             catch (Exception ex)
@@ -123,18 +123,16 @@ namespace AndreaBot.XQ
                         return 1;
 
                     case 214: // BeInvitedToGroup:
-                        var isAdmin = !SheildCheck(fromGroupInt64) && (fromQqInt64 is 1941232341L or 3368228552L ||
-                                                                       XqApi.GetGroupAdminList(robotQq, fromGroupInt64)
-                                                                           .Contains(fromQqInt64));
-                        var message = isAdmin
-                            ? ""
-                            : SheildCheck(fromGroupInt64)
-                                ? "本群处于屏蔽期。"
-                                : "抱歉，您不是群管理员。";
 
-                        Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, isAdmin ? 10 : 20,
-                            message);
+                        var result = HandleAddGroupEvent(fromGroupInt64, fromQqInt64, robotQq, out var refuseMsg);
 
+                        Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, result ? 10 : 20,
+                            refuseMsg);
+
+                        return 1;
+
+                    case 216: //GroupDissolved
+                        DeleteGroup(fromGroupInt64);
                         return 1;
 
                     case 12001: // PluginEnable:

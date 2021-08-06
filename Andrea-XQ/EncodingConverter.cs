@@ -18,7 +18,7 @@ namespace AndreaBot.XQ
 
         internal static IEnumerable<string> SplitToList(this string str)
         {
-            return str.Split(new[] {'\n'}, StringSplitOptions.RemoveEmptyEntries).Select(i => i.Trim()).ToList();
+            return str.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(i => i.Trim()).ToList();
         }
 
         private static string EmojiToSendString(this string msg)

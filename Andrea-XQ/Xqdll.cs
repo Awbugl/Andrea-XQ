@@ -6,7 +6,7 @@ namespace AndreaBot.XQ
     internal static class Xqdll
     {
         private const string DllName = "xqapi.dll";
-        
+
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_GetGroupAdmin")]
         internal static extern IntPtr GetGroupAdmin(byte[] autoid, string robotQq, string group);
 
@@ -31,16 +31,16 @@ namespace AndreaBot.XQ
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_SendXML")]
         internal static extern void SendXML(byte[] autoid, string robotQq, int sendType, int messageType, string group,
             string qq, string xmlMessage);
-        
+
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_LoginQQ")]
         public static extern void LoginQQ(byte[] autoid, string robotQq);
 
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_OffLineQQ")]
         public static extern void OffLineQQ(byte[] autoid, string robotQq);
-        
+
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_GetQQList")]
         public static extern IntPtr GetQQList(byte[] autoid);
-        
+
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_GetOnLineList")]
         public static extern IntPtr GetOnLineList(byte[] autoid);
 
