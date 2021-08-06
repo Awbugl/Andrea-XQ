@@ -1,16 +1,15 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using static AndreaBot.Core.External;
 
 namespace AndreaBot.XQ
 {
-    internal static class Main
+    public static class Main
     {
         private static readonly XqApi Api = new();
         internal static byte[] Authid = new byte[8];
 
-        [DllExport(ExportName = "XQ_AuthId", CallingConvention = CallingConvention.StdCall)]
         public static void XQ_AuthId(int id, int i)
         {
             AuthId(id, i);
@@ -29,7 +28,6 @@ namespace AndreaBot.XQ
             }
         }
 
-        [DllExport(ExportName = "XQ_Create", CallingConvention = CallingConvention.StdCall)]
         public static string XQ_Create(string frameworkversion)
         {
             return Create();
@@ -39,19 +37,18 @@ namespace AndreaBot.XQ
         {
             try
             {
-                AppDomain.CurrentDomain.UnhandledException +=
-                    (_, args) => ExceptionReport(args.ExceptionObject as Exception);
+                //AppDomain.CurrentDomain.UnhandledException += (_, args) => ExceptionReport(args.ExceptionObject as Exception);
                 return
                     @"{""name"":""AndreaBot"",""pver"":""3.0.0"",""sver"": 3,""author"":""littlenine12"",""desc"":""AndreaBot""}";
             }
             catch (Exception ex)
             {
-                ExceptionReport(ex);
+                File.WriteAllText("1.txt",ex.ToString());
+               //ExceptionReport(ex);
                 return "";
             }
         }
 
-        [DllExport(ExportName = "XQ_DestroyPlugin", CallingConvention = CallingConvention.StdCall)]
         public static int XQ_DestroyPlugin()
         {
             return Destory();
@@ -73,13 +70,11 @@ namespace AndreaBot.XQ
             }
         }
 
-        [DllExport(ExportName = "XQ_SetUp", CallingConvention = CallingConvention.StdCall)]
         public static int XQ_SetUp()
         {
             return 0;
         }
 
-        [DllExport(ExportName = "XQ_Event", CallingConvention = CallingConvention.StdCall)]
         public static int XQ_Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
             string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
         {

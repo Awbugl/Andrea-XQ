@@ -87,14 +87,8 @@
         <Error Condition="!Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))"/>
     </Target>
     <PropertyGroup>
-        <PreBuildEvent>if exist "$(TargetDir)$(TargetName)" (echo 文件夹已存在) else (md "$(TargetDir)$(TargetName)")
-            if exist "$(TargetDir)$(TargetName)\app.dll" (del /F /A /Q "$(TargetDir)$(TargetName)\app.dll")
-            if exist "$(TargetDir)$(TargetName)\app.json" (del /F /A /Q "$(TargetDir)$(TargetName)\app.json")
-        </PreBuildEvent>
-    </PropertyGroup>
-    <PropertyGroup>
         <PostBuildEvent>if exist "$(TargetDir)$(TargetName).dll" (
-            move "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\AndreaBot.XQ.dll"
+            copy "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\AndreaBot.dll"
             )
         </PostBuildEvent>
     </PropertyGroup>
