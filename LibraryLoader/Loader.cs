@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 
 namespace LibraryLoader
 {
@@ -13,6 +14,7 @@ namespace LibraryLoader
         static Loader()
         {
             Init();
+            AppDomain.CurrentDomain.UnhandledException += (_, e) => ExceptionReport(e.ExceptionObject as Exception);
         }
 
         private static void ExceptionReport(Exception ex)
@@ -25,7 +27,8 @@ namespace LibraryLoader
             }
             catch
             {
-                //
+                Thread.Sleep(2000);
+                ExceptionReport(ex);
             }
         }
 
@@ -34,7 +37,8 @@ namespace LibraryLoader
             try
             {
                 _dir = new();
-                Assembly assm = Assembly.Load(File.ReadAllBytes("AndreaSourse/XQBridge/AndreaBot.XQBridge.dll"));
+                _needreload = false;
+                Assembly assm = Assembly.Load(File.ReadAllBytes("Plugin/AndreaBot.XQBridge.dll"));
 
                 var mes = assm.GetType("AndreaBot.XQBridge.Main")
                     .GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
@@ -45,7 +49,6 @@ namespace LibraryLoader
                 }
 
                 File.AppendAllText("LoaderLog.log", DateTime.Now.ToShortTimeString() + "     Loaded.\n");
-                _needreload = false;
             }
             catch (Exception e)
             {
@@ -58,7 +61,7 @@ namespace LibraryLoader
             if (_needreload) Init();
             try
             {
-                return _dir["Create"].Invoke(null, null)as string;
+                return _dir.ContainsKey("Create") ? _dir["Create"].Invoke(null, null) as string : "";
             }
             catch (TargetInvocationException e)
             {
@@ -72,7 +75,7 @@ namespace LibraryLoader
         {
             try
             {
-                return (int)_dir["Destory"].Invoke(null, null);
+                return _dir.ContainsKey("Destory") ? (int)_dir["Destory"].Invoke(null, null) : 1;
             }
             catch (TargetInvocationException e)
             {
@@ -92,9 +95,11 @@ namespace LibraryLoader
 
         public static void XQ_AuthId(int id, int i)
         {
+            if (_needreload) Init();
             try
             {
-                if (_needreload) Init();
+                if (!_dir.ContainsKey("AuthId")) Thread.Sleep(10000);
+
                 _dir["AuthId"].Invoke(null, new object[] { id, i });
             }
             catch (TargetInvocationException e)
@@ -112,8 +117,10 @@ namespace LibraryLoader
                 _needreload = true;
             try
             {
-                return (int)_dir["Event"].Invoke(null,
-                    new object[] { robotQq, eventType, fromGroup, fromQq, targetQq, content, udpmsg });
+                return _dir.ContainsKey("Event")
+                    ? (int)_dir["Event"].Invoke(null,
+                        new object[] { robotQq, eventType, fromGroup, fromQq, targetQq, content, udpmsg })
+                    : 1;
             }
             catch (TargetInvocationException e)
             {
