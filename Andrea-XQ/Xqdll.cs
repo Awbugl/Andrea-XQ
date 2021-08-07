@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace AndreaBot.XQ
+namespace AndreaBot.XQBridge
 {
     internal static class Xqdll
     {

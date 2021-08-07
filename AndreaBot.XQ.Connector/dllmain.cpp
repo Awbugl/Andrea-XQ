@@ -1,25 +1,18 @@
 ﻿#include "pch.h"
 #include<cstdio>
 #include<string>
-#define DLL_EXPORT _declspec(dllexport)
+
+#define DLL_EXPORT extern "C" _declspec(dllexport)
 #pragma comment(lib,"ws2_32")
 using namespace System;
 using namespace System::IO;
-using namespace AndreaBot::XQ;
+using namespace AndreaBot::XQBridge;
+using namespace System::Reflection;
 using namespace System::Runtime::InteropServices;
 
 DLL_EXPORT const char* CALLBACK XQ_Create(const char* frameworkVersion)
-{
-	try
-	{
+{	
 	    return (char*)(void*)Marshal::StringToHGlobalAnsi(Main::XQ_Create(gcnew String(frameworkVersion)));
-	}
-	catch(Exception^ exp)
-    {              
-        //char buf[10] = "1.txt";
-        //File::WriteAllText(gcnew String(buf),exp->ToString());
-        return frameworkVersion;      
-    }
 }
 
 DLL_EXPORT int CALLBACK XQ_Event(const char* botQQ, int msgtype, int subType, const char* msgSource, const char* fromQQ, const char* toQQ, const char* msg,
@@ -52,7 +45,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 {
 	switch (ul_reason_for_call)
 	{
-        case DLL_PROCESS_ATTACH:
+        case DLL_PROCESS_ATTACH:   
             return TRUE;
             
         case DLL_THREAD_ATTACH:

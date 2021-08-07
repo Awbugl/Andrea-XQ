@@ -1,6 +1,6 @@
 LIBRARY
 EXPORTS  
-XQ_Create
-XQ_Event
-XQ_DestoryPlugin
-XQ_AuthId
+    XQ_Create @1
+    XQ_Event @2
+    XQ_AuthId @3
+    XQ_DestoryPlugin @4

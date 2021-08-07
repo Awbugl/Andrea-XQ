@@ -7,8 +7,8 @@
         <ProjectGuid>{C03C5BB7-91D0-4894-AAF9-127090DFAD91}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>AndreaBot.XQ</RootNamespace>
-        <AssemblyName>AndreaBot.XQ</AssemblyName>
+        <RootNamespace>AndreaBot.XQBridge</RootNamespace>
+        <AssemblyName>AndreaBot.XQBridge</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <Deterministic>true</Deterministic>
@@ -88,7 +88,7 @@
     </Target>
     <PropertyGroup>
         <PostBuildEvent>if exist "$(TargetDir)$(TargetName).dll" (
-            copy "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\AndreaBot.dll"
+            copy "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\$(TargetName).dll"
             )
         </PostBuildEvent>
     </PropertyGroup>

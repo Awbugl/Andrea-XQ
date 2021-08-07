@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AndreaBot.Core;
 
-namespace AndreaBot.XQ
+namespace AndreaBot.XQBridge
 {
     internal static class EncodingConverter
     {

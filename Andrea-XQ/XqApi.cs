@@ -2,7 +2,7 @@
 using System.Threading;
 using AndreaBot.Core;
 
-namespace AndreaBot.XQ
+namespace AndreaBot.XQBridge
 {
     internal class XqApi : IAndreaApi
     {

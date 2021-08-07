@@ -25,9 +25,9 @@
         <RootNamespace>Dll1</RootNamespace>
         <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
         <TargetFrameworkVersion>4.8</TargetFrameworkVersion>
-        <ProjectName>AndreaBot.XQ.Connector</ProjectName>
+        <ProjectName>AndreaBot.XQ</ProjectName>
     </PropertyGroup>
-    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <UseDebugLibraries>true</UseDebugLibraries>
@@ -56,24 +56,24 @@
         <WholeProgramOptimization>true</WholeProgramOptimization>
         <CharacterSet>Unicode</CharacterSet>
     </PropertyGroup>
-    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
     <ImportGroup Label="ExtensionSettings">
     </ImportGroup>
     <ImportGroup Label="Shared">
     </ImportGroup>
     <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     </ImportGroup>
     <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     </ImportGroup>
     <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     </ImportGroup>
     <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform"/>
+        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     </ImportGroup>
-    <PropertyGroup Label="UserMacros"/>
+    <PropertyGroup Label="UserMacros" />
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
         <LinkIncremental>true</LinkIncremental>
         <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
@@ -104,10 +104,11 @@
             <GenerateDebugInformation>true</GenerateDebugInformation>
             <EnableUAC>false</EnableUAC>
             <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+            <DelayLoadDLLs>"C:\Users\littl\Desktop\AndreaBot.XQBridge.dll"</DelayLoadDLLs>
+            <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
         </Link>
         <PreBuildEvent>
-            <Command>
-            </Command>
+            <Command>copy App.config "$(TargetPath).config"</Command>
         </PreBuildEvent>
         <PostBuildEvent>
             <Command>if exist "$(TargetDir)$(TargetName).dll" ( copy "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\AndreaBot.XQ.dll" )</Command>
@@ -132,13 +133,15 @@
             <GenerateDebugInformation>true</GenerateDebugInformation>
             <EnableUAC>false</EnableUAC>
             <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+            <EmbedManagedResourceFile></EmbedManagedResourceFile>
+            <DelayLoadDLLs>"C:\Users\littl\Desktop\AndreaBot.XQBridge.dll"</DelayLoadDLLs>
+            <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
         </Link>
         <PreBuildEvent>
-            <Command>
-            </Command>
+            <Command>copy App.config "$(TargetPath).config"</Command>
         </PreBuildEvent>
         <PostBuildEvent>
-            <Command>if exist "$(TargetDir)$(TargetName).dll" ( copy "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\AndreaBot.XQ.dll" )</Command>
+            <Command>if exist "$(TargetDir)$(TargetName).dll" ( copy "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\$(TargetName).dll" )</Command>
         </PostBuildEvent>
     </ItemDefinitionGroup>
     <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -157,8 +160,7 @@
             <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
         </Link>
         <PreBuildEvent>
-            <Command>
-            </Command>
+            <Command>copy App.config "$(TargetPath).config"</Command>
         </PreBuildEvent>
         <PostBuildEvent>
             <Command>if exist "$(TargetDir)$(TargetName).dll" ( copy "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\AndreaBot.XQ.dll" )</Command>
@@ -184,19 +186,18 @@
             <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
         </Link>
         <PreBuildEvent>
-            <Command>
-            </Command>
+            <Command>copy App.config "$(TargetPath).config"</Command>
         </PreBuildEvent>
         <PostBuildEvent>
             <Command>if exist "$(TargetDir)$(TargetName).dll" ( copy "$(TargetDir)$(TargetName).dll" "C:\Users\littl\Desktop\AndreaBot.XQ.dll" )</Command>
         </PostBuildEvent>
     </ItemDefinitionGroup>
     <ItemGroup>
-        <ClInclude Include="framework.h"/>
-        <ClInclude Include="pch.h"/>
+        <ClInclude Include="framework.h" />
+        <ClInclude Include="pch.h" />
     </ItemGroup>
     <ItemGroup>
-        <ClCompile Include="dllmain.cpp"/>
+        <ClCompile Include="dllmain.cpp" />
         <ClCompile Include="pch.cpp">
             <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
             <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -205,15 +206,19 @@
         </ClCompile>
     </ItemGroup>
     <ItemGroup>
-        <None Include="Source.def"/>
+        <None Include="App.config" />
+        <None Include="Source.def" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Andrea-XQ\Andrea-XQ.csproj">
-            <Project>{c03c5bb7-91d0-4894-aaf9-127090dfad91}</Project>
-            <Name>Andrea-XQ</Name>
-        </ProjectReference>
+      <Reference Include="System.Configuration" />
     </ItemGroup>
-    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+    <ItemGroup>
+      <ProjectReference Include="..\Andrea-XQ\Andrea-XQ.csproj">
+        <Project>{c03c5bb7-91d0-4894-aaf9-127090dfad91}</Project>
+        <Name>Andrea-XQ</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
     <ImportGroup Label="ExtensionTargets">
     </ImportGroup>
 </Project>

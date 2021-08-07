@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using static AndreaBot.Core.External;
 
-namespace AndreaBot.XQ
+namespace AndreaBot.XQBridge
 {
     public static class Main
     {
@@ -37,14 +36,12 @@ namespace AndreaBot.XQ
         {
             try
             {
-                //AppDomain.CurrentDomain.UnhandledException += (_, args) => ExceptionReport(args.ExceptionObject as Exception);
-                return
-                    @"{""name"":""AndreaBot"",""pver"":""3.0.0"",""sver"": 3,""author"":""littlenine12"",""desc"":""AndreaBot""}";
+                AppDomain.CurrentDomain.UnhandledException += (_, args) => ExceptionReport(args.ExceptionObject as Exception);
+                return @"{""name"":""AndreaBot"",""pver"":""3.0.0"",""sver"": 3,""author"":""littlenine12"",""desc"":""AndreaBot""}";
             }
             catch (Exception ex)
             {
-                File.WriteAllText("1.txt",ex.ToString());
-               //ExceptionReport(ex);
+                ExceptionReport(ex);
                 return "";
             }
         }
