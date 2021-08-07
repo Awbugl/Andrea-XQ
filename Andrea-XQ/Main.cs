@@ -135,6 +135,13 @@ namespace AndreaBot.XQ
                         DeleteGroup(fromGroupInt64);
                         return 1;
 
+                    case 219: // SomeoneHasBeenInvitedIntoGroup
+                        if (targetQq == robotQq)
+                        {
+                            GroupCountCheck(Api,robotQq,fromGroupInt64);
+                        }
+                        return 1;
+                    
                     case 12001: // PluginEnable:
                         Initialize(Api);
                         return 1;
