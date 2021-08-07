@@ -11,22 +11,14 @@ using namespace System::Runtime::InteropServices;
 
 DLL_EXPORT const char* CALLBACK XQ_Create(const char* frameworkVersion)
 {
-	    return (char*)(void*)Marshal::StringToHGlobalAnsi(Loader::XQ_Create(gcnew String(frameworkVersion)));
+    return (char*)(void*)Marshal::StringToHGlobalAnsi(Loader::XQ_Create(gcnew String(frameworkVersion)));
 }
 
 DLL_EXPORT int CALLBACK XQ_Event(const char* botQQ, int msgtype, int subType, const char* msgSource, const char* fromQQ, const char* toQQ, const char* msg,
 	const char* msgSeq, const char* msgId, const char* rawMessage, const char* timestamp, int refuseReasonBuffer)
 {
-	String^ botqq = gcnew String(botQQ);
-	String^ msgsource = gcnew String(msgSource);
-	String^ fromqq = gcnew String(fromQQ);
-	String^ toqq = gcnew String(toQQ);
-	String^ msgseq = gcnew String(msgSeq);
-	String^ msgid = gcnew String(msgId);
-	String^ rawmsg = gcnew String(rawMessage);
-	String^ timeStamp = gcnew String(timestamp);
-	String^ Msg = gcnew String(msg);
-	return Loader::XQ_Event(botqq, msgtype, subType, msgsource, fromqq, toqq, Msg, msgseq, msgid, rawmsg, timeStamp, refuseReasonBuffer);
+	return Loader::XQ_Event(gcnew String(botQQ), gcnew String(msgSource), subType, msgsource, gcnew String(fromQQ),
+	 gcnew String(toQQ), String(msg), gcnew String(msgSeq), gcnew String(msgId), gcnew String(rawMessage), gcnew String(timestamp), refuseReasonBuffer);
 }
 
 DLL_EXPORT int CALLBACK XQ_DestoryPlugin()
