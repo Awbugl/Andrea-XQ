@@ -134,8 +134,9 @@
             <EnableUAC>false</EnableUAC>
             <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
             <EmbedManagedResourceFile></EmbedManagedResourceFile>
-            <DelayLoadDLLs>"C:\Users\littl\Desktop\AndreaBot.XQBridge.dll"</DelayLoadDLLs>
+            <DelayLoadDLLs></DelayLoadDLLs>
             <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
+            <AdditionalDependencies>%(AdditionalDependencies);$(DelayImplib)</AdditionalDependencies>
         </Link>
         <PreBuildEvent>
             <Command>copy App.config "$(TargetPath).config"</Command>
