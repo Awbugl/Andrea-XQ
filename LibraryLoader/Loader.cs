@@ -15,13 +15,27 @@ namespace LibraryLoader
             Init();
         }
 
+        private static void ExceptionReport(Exception ex)
+        {
+            var dir = $"{AppContext.BaseDirectory}/Log/{DateTime.Now:yyyy-M-d}/";
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            try
+            {
+                File.AppendAllText($"{dir}LoaderErr.log", $"{DateTime.Now:T}\n{ex}\n\n");
+            }
+            catch
+            {
+                //
+            }
+        }
+
         private static void Init()
         {
             try
             {
                 _dir = new();
                 Assembly assm = Assembly.Load(File.ReadAllBytes("AndreaSourse/XQBridge/AndreaBot.XQBridge.dll"));
-                
+
                 var mes = assm.GetType("AndreaBot.XQBridge.Main")
                     .GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -30,18 +44,27 @@ namespace LibraryLoader
                     _dir.Add(methodInfo.Name, methodInfo);
                 }
 
+                File.AppendAllText("LoaderLog.log", DateTime.Now.ToShortTimeString() + "     Loaded.\n");
                 _needreload = false;
             }
             catch (Exception e)
             {
-                File.WriteAllText("1.txt", e.ToString());
+                ExceptionReport(e);
             }
         }
 
         public static string XQ_Create(string frameworkversion)
         {
             if (_needreload) Init();
-            return _dir["Create"].Invoke(null, null) as string;
+            try
+            {
+                return _dir["Create"].Invoke(null, null)as string;
+            }
+            catch (TargetInvocationException e)
+            {
+                ExceptionReport(e.InnerException);
+                return "";
+            }
         }
 
 
@@ -49,14 +72,16 @@ namespace LibraryLoader
         {
             try
             {
-                _needreload = true;
                 return (int)_dir["Destory"].Invoke(null, null);
+            }
+            catch (TargetInvocationException e)
+            {
+                ExceptionReport(e.InnerException);
+                return 1;
             }
             finally
             {
-                var curr = AppDomain.CurrentDomain;
-                var act = new Action(() => AppDomain.Unload(curr));
-                AppDomain.CreateDomain("UnloadLoader").DoCallBack(act.Invoke);
+                _needreload = true;
             }
         }
 
@@ -67,8 +92,15 @@ namespace LibraryLoader
 
         public static void XQ_AuthId(int id, int i)
         {
-            if (_needreload) Init();
-            _dir["AuthId"].Invoke(null, new object[] { id, i });
+            try
+            {
+                if (_needreload) Init();
+                _dir["AuthId"].Invoke(null, new object[] { id, i });
+            }
+            catch (TargetInvocationException e)
+            {
+                ExceptionReport(e.InnerException);
+            }
         }
 
         public static int XQ_Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
@@ -78,9 +110,16 @@ namespace LibraryLoader
 
             if (eventType == 12002)
                 _needreload = true;
-
-            return (int)_dir["Event"].Invoke(null,
-                new object[] { robotQq, eventType, fromGroup, fromQq, targetQq, content, udpmsg });
+            try
+            {
+                return (int)_dir["Event"].Invoke(null,
+                    new object[] { robotQq, eventType, fromGroup, fromQq, targetQq, content, udpmsg });
+            }
+            catch (TargetInvocationException e)
+            {
+                ExceptionReport(e.InnerException);
+                return 1;
+            }
         }
     }
 }

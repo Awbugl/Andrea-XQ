@@ -17,8 +17,8 @@ DLL_EXPORT const char* CALLBACK XQ_Create(const char* frameworkVersion)
 DLL_EXPORT int CALLBACK XQ_Event(const char* botQQ, int msgtype, int subType, const char* msgSource, const char* fromQQ, const char* toQQ, const char* msg,
 	const char* msgSeq, const char* msgId, const char* rawMessage, const char* timestamp, int refuseReasonBuffer)
 {
-	return Loader::XQ_Event(gcnew String(botQQ), gcnew String(msgSource), subType, msgsource, gcnew String(fromQQ),
-	 gcnew String(toQQ), String(msg), gcnew String(msgSeq), gcnew String(msgId), gcnew String(rawMessage), gcnew String(timestamp), refuseReasonBuffer);
+	return Loader::XQ_Event(gcnew String(botQQ), msgtype, subType, gcnew String(msgSource), gcnew String(fromQQ),
+	 gcnew String(toQQ),gcnew String(msg), gcnew String(msgSeq), gcnew String(msgId), gcnew String(rawMessage), gcnew String(timestamp), refuseReasonBuffer);
 }
 
 DLL_EXPORT int CALLBACK XQ_DestoryPlugin()

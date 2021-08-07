@@ -56,9 +56,6 @@ namespace AndreaBot.XQBridge
             try
             {
                 Deinitialize();
-                var curr = AppDomain.CurrentDomain;
-                var act = new Action(() => AppDomain.Unload(curr));
-                AppDomain.CreateDomain("UnloadBridge").DoCallBack(act.Invoke);
                 return 1;
             }
             catch (Exception ex)
