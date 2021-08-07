@@ -210,6 +210,12 @@
         <None Include="Source.def" />
     </ItemGroup>
     <ItemGroup>
+      <Reference Include="Costura.Fody, Version=1.6.2.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Release\packages\Costura.Fody.1.6.2\Costura.Fody.dll</HintPath>
+      </Reference>
+      <Reference Include="Costura.Tasks, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Release\packages\Costura.Fody.1.6.2\Costura.Tasks.dll</HintPath>
+      </Reference>
       <Reference Include="System.Configuration" />
     </ItemGroup>
     <ItemGroup>
