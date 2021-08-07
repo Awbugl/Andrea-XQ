@@ -106,6 +106,7 @@
             <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
             <DelayLoadDLLs>"C:\Users\littl\Desktop\AndreaBot.XQBridge.dll"</DelayLoadDLLs>
             <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
+            <AdditionalLibraryDirectories>"/Plugin"</AdditionalLibraryDirectories>
         </Link>
         <PreBuildEvent>
             <Command>copy App.config "$(TargetPath).config"</Command>
@@ -137,6 +138,7 @@
             <DelayLoadDLLs></DelayLoadDLLs>
             <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
             <AdditionalDependencies>%(AdditionalDependencies);$(DelayImplib)</AdditionalDependencies>
+            <AdditionalLibraryDirectories>"/Plugin"</AdditionalLibraryDirectories>
         </Link>
         <PreBuildEvent>
             <Command>copy App.config "$(TargetPath).config"</Command>
@@ -214,9 +216,9 @@
       <Reference Include="System.Configuration" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Andrea-XQ\Andrea-XQ.csproj">
-        <Project>{c03c5bb7-91d0-4894-aaf9-127090dfad91}</Project>
-        <Name>Andrea-XQ</Name>
+      <ProjectReference Include="..\LibraryLoader\LibraryLoader.csproj">
+        <Project>{3644c532-55db-4f67-a2f5-ab289980b58b}</Project>
+        <Name>LibraryLoader</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -8,7 +8,7 @@ namespace AndreaBot.XQBridge
     {
         private static readonly XqApi Api = new();
         internal static byte[] Authid = new byte[8];
-
+      
         public static void XQ_AuthId(int id, int i)
         {
             AuthId(id, i);
@@ -26,7 +26,7 @@ namespace AndreaBot.XQBridge
                 ExceptionReport(ex);
             }
         }
-
+    
         public static string XQ_Create(string frameworkversion)
         {
             return Create();
@@ -45,7 +45,7 @@ namespace AndreaBot.XQBridge
                 return "";
             }
         }
-
+    
         public static int XQ_DestroyPlugin()
         {
             return Destory();
@@ -56,8 +56,9 @@ namespace AndreaBot.XQBridge
             try
             {
                 Deinitialize();
-                var act = new Action(() => AppDomain.Unload(AppDomain.CurrentDomain));
-                AppDomain.CreateDomain("Unload").DoCallBack(act.Invoke);
+                var curr = AppDomain.CurrentDomain;
+                var act = new Action(() => AppDomain.Unload(curr));
+                AppDomain.CreateDomain("UnloadBridge").DoCallBack(act.Invoke);
                 return 1;
             }
             catch (Exception ex)
@@ -66,12 +67,12 @@ namespace AndreaBot.XQBridge
                 return 1;
             }
         }
-
+        
         public static int XQ_SetUp()
         {
             return 0;
         }
-
+     
         public static int XQ_Event(string robotQq, int eventType, int extraType, string fromGroup, string fromQq,
             string targetQq, string content, string index, string msgid, string udpmsg, string unix, int p)
         {
