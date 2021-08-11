@@ -124,7 +124,7 @@ namespace AndreaBot.XQ
 
                     case 214: // BeInvitedToGroup:
 
-                        var result = HandleAddGroupEvent(fromGroupInt64, fromQqInt64, robotQq, out var refuseMsg);
+                        var result = HandleAddGroupEvent(Api, fromGroupInt64, fromQqInt64, robotQq, out var refuseMsg);
 
                         Xqdll.HandleGroupEvent(Authid, robotQq, 214, fromQq, fromGroup, udpmsg, result ? 10 : 20,
                             refuseMsg);
@@ -136,12 +136,10 @@ namespace AndreaBot.XQ
                         return 1;
 
                     case 219: // SomeoneHasBeenInvitedIntoGroup
-                        if (targetQq == robotQq)
-                        {
-                            GroupCountCheck(Api,robotQq,fromGroupInt64);
-                        }
+                        if (targetQq == robotQq) GroupCountCheck(Api, robotQq, fromGroupInt64);
+
                         return 1;
-                    
+
                     case 12001: // PluginEnable:
                         Initialize(Api);
                         return 1;
