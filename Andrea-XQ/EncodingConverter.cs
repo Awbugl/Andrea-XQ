@@ -11,8 +11,8 @@ namespace AndreaBot.XQ
 {
     internal static class EncodingConverter
     {
-        private static readonly Lazy<Regex> Reg = new(() =>
-            new Regex("(&nbsp;|\\[em\\](e[0-9]{1,6})\\[\\/em\\])", RegexOptions.IgnoreCase | RegexOptions.ECMAScript));
+        private static readonly Lazy<Regex> Reg = new(() => new("(&nbsp;|\\[em\\](e[0-9]{1,6})\\[\\/em\\])",
+                                                                RegexOptions.IgnoreCase | RegexOptions.ECMAScript));
 
         private static readonly Encoding Gb18030 = Encoding.GetEncoding("gb18030");
 
@@ -31,17 +31,14 @@ namespace AndreaBot.XQ
                 var m = rslt.Groups;
                 ret.Append(msg.Substring(last, m[0].Index));
                 if (m[0].Value[0] == '&')
-                {
                     ret.Append(" ");
-                }
                 else
                 {
                     var codePoint = int.Parse(m[2].Value.Substring(1));
                     switch (codePoint)
                     {
                         case > 200000:
-                            ret.Append(
-                                $"[emoji={Encoding.Convert(Encoding.UTF32, Encoding.UTF8, BitConverter.GetBytes(codePoint - 200000)).Aggregate("", (current, i) => current + i.ToString("X2"))}]");
+                            ret.Append($"[emoji={Encoding.Convert(Encoding.UTF32, Encoding.UTF8, BitConverter.GetBytes(codePoint - 200000)).Aggregate("", (current, i) => current + i.ToString("X2"))}]");
                             break;
                         case >= 100000:
                             ret.Append($"[Face{codePoint - 100000}.gif]");
@@ -80,10 +77,8 @@ namespace AndreaBot.XQ
             }
         }
 
-        internal static string Utf8ToSendString(this string utf8String)
-        {
-            return BytesToString(Encoding.Convert(Encoding.UTF8, Gb18030, Encoding.UTF8.GetBytes(utf8String)));
-        }
+        internal static string Utf8ToSendString(this string utf8String) =>
+            BytesToString(Encoding.Convert(Encoding.UTF8, Gb18030, Encoding.UTF8.GetBytes(utf8String)));
 
         private static string BytesToString(byte[] bin)
         {
@@ -92,7 +87,11 @@ namespace AndreaBot.XQ
 
             var sb = new StringBuilder();
             for (var i = 0; i < length;)
-                sb.Append(EncodingGetString(Gb18030, bin, ref i, bin[i] < 0x80 ? 1 : bin[i + 1] > 0x3F ? 2 : 4));
+                sb.Append(EncodingGetString(Gb18030, bin, ref i, bin[i] < 0x80
+                                                ? 1
+                                                : bin[i + 1] > 0x3F
+                                                    ? 2
+                                                    : 4));
 
             return sb.ToString();
         }
@@ -103,9 +102,8 @@ namespace AndreaBot.XQ
 
             return count < 4
                 ? encoding.GetString(bin, index - count, count)
-                : Encoding.Convert(encoding, Encoding.UTF8,
-                    bin.Skip(index - count).Take(4).ToArray()).Aggregate("[emoji=", (current, bi)
-                    => current + bi.ToString("X2")) + "]";
+                : Encoding.Convert(encoding, Encoding.UTF8, bin.Skip(index - count).Take(4).ToArray())
+                          .Aggregate("[emoji=", (current, bi) => current + bi.ToString("X2")) + "]";
         }
     }
 }
