@@ -13,10 +13,10 @@ namespace AndreaBot.XQ
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_HandleFriendEvent")]
         internal static extern void HandleFriendEvent(byte[] autoid, string robotQq, string qq, int messageType,
                                                       string message);
-        
+
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_Getbotisonline")]
         internal static extern bool GetBotIsOnline(byte[] autoid, string qq);
-        
+
         [DllImport(DllName, CharSet = CharSet.Ansi, EntryPoint = "S3_Api_GetNick")]
         internal static extern IntPtr GetNick(byte[] autoid, string robotQq, string qq);
 

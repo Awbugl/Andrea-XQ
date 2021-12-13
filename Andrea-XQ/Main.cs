@@ -147,7 +147,7 @@ namespace AndreaBot.XQ
                     case 1106: //RobotNeedTokenVerify = 1106,
                     case 1107: //RobotNeedSmsVerify = 1107,
                     case 1108: //RobotLoginFailed = 1108
-                        RobotOfflineReport(robotQq);
+                        if (DateTime.Now.Hour != 4) RobotOfflineReport(robotQq);
                         return 1;
 
                     case 12001: // PluginEnable
